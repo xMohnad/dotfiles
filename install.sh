@@ -139,4 +139,8 @@ done
 
 log_message "Fish configuration files have been copied successfully."
 
+touch ~/.hushlogin
+termux-reload-settings
+source ~/.config/fish/config.fish
+
 log_message "finished..."
