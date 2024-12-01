@@ -1,13 +1,17 @@
 #!/bin/bash
 
+set -e # Exit immediately if a command exits with a non-zero status
+
+# Default target directory for testing
+TARGET_DIR="~/"
+
 # Log file path
-LOG_FILE="$HOME/backup_copy_log.txt"
+LOG_FILE="$TARGET_DIR/backup_copy_log.txt"
 
 # Function to log messages to a log file
 log_message() {
   local message="$1"
-  echo "$(date '+%Y-%m-%d %H:%M:%S') - $message"
-  echo "$(date '+%Y-%m-%d %H:%M:%S') - $message" >>"$LOG_FILE"
+  echo "$(date '+%Y-%m-%d %H:%M:%S') - $message" | tee -a "$LOG_FILE"
 }
 
 # Function to copy a file or directory with a backup if it already exists
@@ -24,123 +28,122 @@ backup_and_copy() {
   log_message "Copied: $src -> $dest"
 }
 
+# Create target directory if it doesn't exist
+mkdir -p "$TARGET_DIR"
+log_message "Using target directory: $TARGET_DIR"
+
 # Update and install packages
 pkg update && pkg upgrade -y
-pkg install tur-repo -y
-pkg update
-pkg install git wget fish which root-repo x11-repo clang termux-api -y
+pkg install tur-repo -y && pkg update
+pkg install git wget fish which root-repo x11-repo clang termux-api neovim yarn shfmt lua-language-server python libxml2 libxslt ruff eza bat neofetch fzf -y
 
-# Install fish and configure prompt
-curl -L https://get.oh-my.fish | fish
-chsh -s fish
-log_message "Fish shell installed and set as default."
+# Install and configure Fish shell
+if [ ! -e ~/.local/share/omf ]; then
+  log_message "Oh My Fish (OMF) not found. Installing..."
+  curl -L https://get.oh-my.fish | fish
+  if [ -e ~/.local/share/omf ]; then
+    log_message "Oh My Fish (OMF) installed successfully."
+  else
+    log_message "Failed to install Oh My Fish (OMF)."
+    exit 1
+  fi
+else
+  log_message "Oh My Fish (OMF) is already installed."
+fi
 
-# Install prompt using Fisher
-curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
-fisher install IlanCosman/tide
-tide configure --auto --style=Lean --prompt_colors='True color' --show_time=No --lean_prompt_height='Two lines' --prompt_connection=Disconnected --prompt_spacing=Sparse --icons='Many icons' --transient=Yes
+# Change the default shell to Fish if not already set
+if [ "$SHELL" != "$(command -v fish)" ]; then
+  chsh -s "$(command -v fish)"
+  log_message "Fish shell set as default."
+else
+  log_message "Fish shell is already the default."
+fi
+
+# Install and configure Fisher and Tide
 log_message "Prompt configured using Tide."
+fish -c "curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher"
+fish -c "fisher install IlanCosman/tide"
+fish -c "tide configure --auto --style=Lean --prompt_colors='True color' --show_time=No"
 
-# Setup neovim and additional configurations
-pkh install neovim yarn shfmt lua-language-server python libxml2 libxslt ruff -y
-yarn global add bash-language-server
-pip install black mypy pyright
-pkg install eza bat neofetch fzf -y
+# Setup Neovim and additional configurations
+yarn global add bash-language-server || log_message "Failed to install bash-language-server"
+pip install black mypy pyright || log_message "Failed to install Python packages"
 log_message "Neovim and additional packages installed."
 
-# # # #
-
-# Define the source URL for the repository
+# Clone the repository
 REPO_URL="https://github.com/xMohnad/termux-dotfiles.git"
-INSTALL_DIR="$HOME/termux-dotfiles"
+INSTALL_DIR="$TARGET_DIR/termux-dotfiles"
 
-# Create the destination directory if it doesn't exist
-mkdir -p "$INSTALL_DIR"
-log_message "Created installation directory: $INSTALL_DIR"
+if [ -d "$INSTALL_DIR" ]; then
+  log_message "Repository already exists at $INSTALL_DIR"
+else
+  mkdir -p "$INSTALL_DIR"
+  git clone "$REPO_URL" "$INSTALL_DIR"
+  log_message "Cloned repository from $REPO_URL to $INSTALL_DIR"
+fi
 
-# Clone the repository into the installation directory
-git clone "$REPO_URL" "$INSTALL_DIR"
-log_message "Cloned repository from $REPO_URL to $INSTALL_DIR"
-
-# Start copy operation
 log_message "Starting copy operation..."
 
+# Start copy operation
 cd "$INSTALL_DIR"
+FILES=(".colorscheme" ".fonts" ".gitignore" ".scripts" ".termux")
 
-# List of files and directories to copy to the home directory
-FILES=(
-  ".colorscheme"
-  ".fonts"
-  ".gitignore"
-  ".scripts"
-  ".termux"
-)
-
-# Ensure the destination directory exists
-mkdir -p "$DEST_DIR"
-
-# Copy files and directories to the $HOME directory
 for file in "${FILES[@]}"; do
   src="./$file"
-  dest="$HOME/$file"
-
-  # If source does not exist, create an empty directory/file to copy
-  if [ ! -e "$src" ]; then
-    mkdir -p "$(dirname "$src")"
-    touch "$src"
-    log_message "Created empty: $src"
+  dest="$TARGET_DIR/$file"
+  if [ -e "$src" ]; then
+    backup_and_copy "$src" "$dest"
+  else
+    log_message "Skipping missing file: $src"
   fi
-
-  backup_and_copy "$src" "$dest"
 done
 
-log_message "Copy operation completed successfully."
-
-# Source and destination directories
+# Copy configuration files
 SRC_DIR="./config"
-DEST_DIR="$HOME/.config"
+DEST_DIR="$TARGET_DIR/.config"
 
-# Copy all files and directories from the source to the destination
-for file in "$SRC_DIR"/*; do
-  base_file=$(basename "$file")
-  src="$SRC_DIR/$base_file"
-  dest="$DEST_DIR/$base_file"
+if [ ! -d "$SRC_DIR" ]; then
+  log_message "Source directory $SRC_DIR does not exist."
+else
+  mkdir -p "$DEST_DIR"
+  for file in "$SRC_DIR"/*; do
+    base_file=$(basename "$file")
+    src="$SRC_DIR/$base_file"
+    dest="$DEST_DIR/$base_file"
 
-  # Skip copying if the directory is 'fish'
-  if [[ "$base_file" == "fish" ]]; then
-    log_message "Skipping directory: $src"
-    continue
-  fi
+    if [[ "$base_file" == "fish" ]]; then
+      log_message "Skipping directory: $src"
+      continue
+    fi
 
-  # If source does not exist, create an empty directory
-  if [ ! -e "$src" ]; then
-    mkdir -p "$src"
-    log_message "Created empty directory: $src"
-  fi
+    if [ -e "$src" ]; then
+      backup_and_copy "$src" "$dest"
+    else
+      log_message "Skipping missing file/directory: $src"
+    fi
+  done
+fi
 
-  backup_and_copy "$src" "$dest"
-done
-
-# Source and destination directories for fish files
+# Copy Fish configuration files
 FISH_SRC="./config/fish"
-FISH_DEST="$HOME/.config/fish"
+FISH_DEST="$TARGET_DIR/.config/fish"
 
-# Create the destination directory if it does not exist
-mkdir -p "$FISH_DEST"
+if [ -d "$FISH_SRC" ]; then
+  mkdir -p "$FISH_DEST"
+  for file in "$FISH_SRC"/*; do
+    src="$FISH_SRC/$file"
+    dest="$FISH_DEST/$file"
+    backup_and_copy "$src" "$dest"
+  done
+else
+  log_message "Fish configuration directory $FISH_SRC does not exist."
+fi
 
-# Copy files from fish source to destination, taking backups
-for file in "$FISH_SRC"/*; do
-  base_file=$(basename "$file")
-  src="$FISH_SRC/$base_file"
-  dest="$FISH_DEST/$base_file"
-
-  backup_and_copy "$src" "$dest"
-done
-
-log_message "Fish configuration files have been copied successfully."
-
+# Final setup
 touch ~/.hushlogin
 termux-reload-settings
-source ~/.config/fish/config.fish
+if [ -f ~/.config/fish/config.fish ]; then
+  source ~/.config/fish/config.fish
+fi
 
-log_message "finished..."
+log_message "Script completed successfully."
