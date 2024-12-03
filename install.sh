@@ -1,20 +1,33 @@
 #!/bin/bash
 
-# set -e # Exit immediately if a command exits with a non-zero status
+# Set up paths
+# TARGET_DIR="./test/"
+TARGET_DIR="$HOME"
 
-# Default target directory for testing
-TARGET_DIR="~/"
+LOG_FILE="$TARGET_DIR/installation_log.txt"
+INSTALL_DIR="$TARGET_DIR/termux-dotfiles"
 
-# Log file path
-LOG_FILE="$TARGET_DIR/backup_copy_log.txt"
+# Directories to copy files to
+SCRIPTS="$TARGET_DIR/.scripts"
+FONTS="$TARGET_DIR/.fonts"
+TERMUX_CONFIG="$TARGET_DIR/.termux"
+COLORSCHEME="$TARGET_DIR/.colorscheme"
 
-# Function to log messages to a log file
+CONFIG_DIR="$TARGET_DIR/.config"
+NEOVIM_CONFIG="$CONFIG_DIR/nvim"
+MYTERMUX_CONFIG="$CONFIG_DIR/mytermux"
+
+FISH_CONFIG="$CONFIG_DIR/fish"
+FISH_CONFIG_FILE="$FISH_CONFIG/config.fish"
+FISH_ALIASES_FILE="$FISH_CONFIG/fish_aliases.fish"
+
+# Log function to log messages
 log_message() {
   local message="$1"
   echo "$(date '+%Y-%m-%d %H:%M:%S') - $message" | tee -a "$LOG_FILE"
 }
 
-# Function to copy a file or directory with a backup if it already exists
+# Backup and copy function for files and directories
 backup_and_copy() {
   local src="$1"
   local dest="$2"
@@ -27,123 +40,148 @@ backup_and_copy() {
   cp -r "$src" "$dest"
   log_message "Copied: $src -> $dest"
 }
-
-# Create target directory if it doesn't exist
-mkdir -p "$TARGET_DIR"
-log_message "Using target directory: $TARGET_DIR"
-
-# Update and install packages
-pkg update && pkg upgrade -y
-pkg install tur-repo -y && pkg update
-pkg install git wget fish which root-repo x11-repo clang termux-api neovim yarn shfmt lua-language-server python libxml2 libxslt ruff eza bat neofetch fzf -y
+# Install required packages
+install_packages() {
+  log_message "Updating and upgrading system packages..."
+  pkg update && pkg upgrade -y
+  log_message "Installing necessary packages..."
+  pkg install git wget fish neovim curl termux-api x11-repo clang -y
+}
 
 # Install and configure Fish shell
-if [ ! -e ~/.local/share/omf ]; then
-  log_message "Oh My Fish (OMF) not found. Installing..."
-  curl -L https://get.oh-my.fish | fish
-  if [ -e ~/.local/share/omf ]; then
-    log_message "Oh My Fish (OMF) installed successfully."
+configure_fish() {
+  log_message "Configuring Fish shell..."
+
+  if [ ! -d "$HOME/.local/share/omf" ]; then
+    log_message "Installing Oh My Fish (OMF)..."
+    curl -L https://get.oh-my.fish | fish
+    log_message "Oh My Fish (OMF) installed."
   else
-    log_message "Failed to install Oh My Fish (OMF)."
-    exit 1
+    log_message "Oh My Fish (OMF) is already installed."
   fi
-else
-  log_message "Oh My Fish (OMF) is already installed."
-fi
 
-# Change the default shell to Fish if not already set
-if [ "$SHELL" != "$(command -v fish)" ]; then
-  chsh -s "$(command -v fish)"
-  log_message "Fish shell set as default."
-else
-  log_message "Fish shell is already the default."
-fi
-
-# Setup Neovim and additional configurations
-yarn global add bash-language-server || log_message "Failed to install bash-language-server"
-pip install black mypy pyright || log_message "Failed to install Python packages"
-log_message "Neovim and additional packages installed."
-
-# Clone the repository
-REPO_URL="https://github.com/xMohnad/termux-dotfiles.git"
-INSTALL_DIR="$TARGET_DIR/termux-dotfiles"
-
-if [ -d "$INSTALL_DIR" ]; then
-  log_message "Repository already exists at $INSTALL_DIR"
-else
-  mkdir -p "$INSTALL_DIR"
-  git clone "$REPO_URL" "$INSTALL_DIR"
-  log_message "Cloned repository from $REPO_URL to $INSTALL_DIR"
-fi
-
-log_message "Starting copy operation..."
-
-# Start copy operation
-cd "$INSTALL_DIR"
-FILES=(".colorscheme" ".fonts" ".gitignore" ".scripts" ".termux")
-
-for file in "${FILES[@]}"; do
-  src="./$file"
-  dest="$TARGET_DIR/$file"
-  if [ -e "$src" ]; then
-    backup_and_copy "$src" "$dest"
+  if [ "$SHELL" != "$(command -v fish)" ]; then
+    chsh -s "$(command -v fish)"
+    log_message "Fish shell set as default."
   else
-    log_message "Skipping missing file: $src"
+    log_message "Fish shell is already the default."
   fi
-done
 
-# Copy configuration files
-SRC_DIR="./config"
-DEST_DIR="$TARGET_DIR/.config"
+  # Install and configure Tide prompt via Fisher
+  log_message "Prompt configured using Tide."
 
-if [ ! -d "$SRC_DIR" ]; then
-  log_message "Source directory $SRC_DIR does not exist."
-else
-  mkdir -p "$DEST_DIR"
-  for file in "$SRC_DIR"/*; do
-    base_file=$(basename "$file")
-    src="$SRC_DIR/$base_file"
-    dest="$DEST_DIR/$base_file"
+  # Ask user if they want to change the prompt to Tide
+  read -p "Do you want to change the prompt to Tide? (y/n): " change_prompt
 
-    if [[ "$base_file" == "fish" ]]; then
-      log_message "Skipping directory: $src"
-      continue
+  if [[ "$change_prompt" =~ ^[Yy]$ ]]; then
+    log_message "Prompt configured using Tide."
+
+    if [ ! -f "$HOME/.config/fish/functions/fisher.fish" ]; then
+      fish -c "curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher"
     fi
 
-    if [ -e "$src" ]; then
-      backup_and_copy "$src" "$dest"
-    else
-      log_message "Skipping missing file/directory: $src"
+    if [ ! -f "$HOME/.config/fish/functions/tide.fish" ]; then
+      fish -c "fisher install IlanCosman/tide"
     fi
-  done
-fi
 
-# Copy Fish configuration files
-FISH_SRC="./config/fish"
-FISH_DEST="$TARGET_DIR/.config/fish"
+    fish -c "tide configure --auto --style=Lean --prompt_colors='True color' --show_time=No"
+    log_message "Tide prompt configured."
+  else
+    log_message "Keeping the default prompt."
+  fi
+}
 
-if [ -d "$FISH_SRC" ]; then
-  mkdir -p "$FISH_DEST"
-  for file in "$FISH_SRC"/*; do
-    src="$FISH_SRC/$file"
-    dest="$FISH_DEST/$file"
-    backup_and_copy "$src" "$dest"
-  done
-else
-  log_message "Fish configuration directory $FISH_SRC does not exist."
-fi
+# Install Neovim and additional configurations
+configure_neovim() {
+  log_message "Setting up Neovim..."
+  yarn global add bash-language-server || log_message "Failed to install bash-language-server"
+  pip install black mypy pyright || log_message "Failed to install Python packages"
+  log_message "Neovim and additional packages installed."
+}
+
+# Clone the repository if it doesn't exist
+clone_repository() {
+  if [ ! -d "$INSTALL_DIR" ]; then
+    git clone "https://github.com/xMohnad/termux-dotfiles.git" "$INSTALL_DIR"
+    log_message "Cloned repository into $INSTALL_DIR."
+  else
+    log_message "Repository already exists at $INSTALL_DIR."
+  fi
+}
+
+# Copy configuration files from source to destination
+copy_config_files() {
+  log_message "Copying configuration files..."
+
+  # Start copying files
+
+  # Copy .colorscheme files
+  log_message "Starting to copy .colorscheme"
+  backup_and_copy "$INSTALL_DIR/.colorscheme" "$COLORSCHEME"
+
+  # Copy .fonts files
+  log_message "Starting to copy .fonts"
+  backup_and_copy "$INSTALL_DIR/.fonts" "$FONTS"
+
+  # Copy .scripts files
+  log_message "Starting to copy .scripts"
+  backup_and_copy "$INSTALL_DIR/.scripts" "$SCRIPTS"
+
+  # Copy .termux files
+  log_message "Starting to copy .termux"
+  backup_and_copy "$INSTALL_DIR/.termux" "$TERMUX_CONFIG"
+
+  # Copy fish config files
+  log_message "Starting to copy fish config"
+  # Ensure the target directories exist
+  mkdir -p "$TARGET_DIR/.config/fish"
+  mkdir -p "$TARGET_DIR/.config/nvim"
+  mkdir -p "$TARGET_DIR/.config/mytermux"
+  backup_and_copy "$INSTALL_DIR/config/fish/config.fish" "$FISH_CONFIG_FILE"
+  backup_and_copy "$INSTALL_DIR/config/fish/fish_aliases.fish" "$FISH_ALIASES_FILE"
+
+  # Copy neovim config
+  log_message "Starting to copy Neovim config"
+  backup_and_copy "$INSTALL_DIR/config/nvim" "$NEOVIM_CONFIG"
+
+  # Copy mytermux config
+  log_message "Starting to copy mytermux config"
+  backup_and_copy "$INSTALL_DIR/config/mytermux" "$MYTERMUX_CONFIG"
+
+}
 
 # Final setup
-touch ~/.hushlogin
-termux-reload-settings
-if [ -f ~/.config/fish/config.fish ]; then
-  source ~/.config/fish/config.fish
-fi
+final_setup() {
+  log_message "Performing final setup..."
+  touch "$TARGET_DIR/.hushlogin"
+  termux-reload-settings
+  # if [ -f "$HOME/.config/fish/config.fish" ]; then
+  # source "$HOME/.config/fish/config.fish"
+  # fi
+}
 
-# Install and configure Fisher and Tide
-log_message "Prompt configured using Tide."
-fish -c "curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher"
-fish -c "fisher install IlanCosman/tide"
-fish -c "tide configure --auto --style=Lean --prompt_colors='True color' --show_time=No"
+# Run all installation steps
+main() {
+  log_message "Starting installation process..."
 
-log_message "Script completed successfully."
+  # Install packages
+  install_packages
+
+  # Configure Fish
+  configure_fish
+
+  # Configure Neovim
+  configure_neovim
+
+  # Clone repository and copy files
+  clone_repository
+  copy_config_files
+
+  # Final setup
+  final_setup
+
+  log_message "Installation completed successfully."
+}
+
+# Execute the main function
+main
