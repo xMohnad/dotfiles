@@ -7,7 +7,7 @@
 
 # System and Environment
 set -x PATH $PREFIX/bin $HOME/.local/bin $PATH
-set -gx USER "xMohnad"
+# set -gx USER "xMohnad"
 export TZ='UTC'
 
 ### ADDING TO THE PATH

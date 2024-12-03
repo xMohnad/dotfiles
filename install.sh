@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e # Exit immediately if a command exits with a non-zero status
+# set -e # Exit immediately if a command exits with a non-zero status
 
 # Default target directory for testing
 TARGET_DIR="~/"
@@ -58,12 +58,6 @@ if [ "$SHELL" != "$(command -v fish)" ]; then
 else
   log_message "Fish shell is already the default."
 fi
-
-# Install and configure Fisher and Tide
-log_message "Prompt configured using Tide."
-fish -c "curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher"
-fish -c "fisher install IlanCosman/tide"
-fish -c "tide configure --auto --style=Lean --prompt_colors='True color' --show_time=No"
 
 # Setup Neovim and additional configurations
 yarn global add bash-language-server || log_message "Failed to install bash-language-server"
@@ -145,5 +139,11 @@ termux-reload-settings
 if [ -f ~/.config/fish/config.fish ]; then
   source ~/.config/fish/config.fish
 fi
+
+# Install and configure Fisher and Tide
+log_message "Prompt configured using Tide."
+fish -c "curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher"
+fish -c "fisher install IlanCosman/tide"
+fish -c "tide configure --auto --style=Lean --prompt_colors='True color' --show_time=No"
 
 log_message "Script completed successfully."
