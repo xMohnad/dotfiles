@@ -16,6 +16,7 @@ COLORSCHEME="$TARGET_DIR/.colorscheme"
 CONFIG_DIR="$TARGET_DIR/.config"
 NEOVIM_CONFIG="$CONFIG_DIR/nvim"
 MYTERMUX_CONFIG="$CONFIG_DIR/mytermux"
+PTPYTHON_CONFIG="$CONFIG_DIR/ptpython"
 
 FISH_CONFIG="$CONFIG_DIR/fish"
 FISH_CONFIG_FILE="$FISH_CONFIG/config.fish"
@@ -45,7 +46,7 @@ install_packages() {
   log_message "Updating and upgrading system packages..."
   pkg update && pkg upgrade -y
   log_message "Installing necessary packages..."
-  pkg install git wget fish neovim curl termux-api x11-repo clang -y
+  pkg install git wget fish neovim curl termux-api x11-repo clang eza bat fzf -y
 }
 
 # Install and configure Fish shell
@@ -95,7 +96,7 @@ configure_fish() {
 configure_neovim() {
   log_message "Setting up Neovim..."
   yarn global add bash-language-server || log_message "Failed to install bash-language-server"
-  pip install black mypy pyright || log_message "Failed to install Python packages"
+  pip install black mypy pyright ptpython || log_message "Failed to install Python packages"
   log_message "Neovim and additional packages installed."
 }
 
@@ -137,6 +138,8 @@ copy_config_files() {
   mkdir -p "$TARGET_DIR/.config/fish"
   mkdir -p "$TARGET_DIR/.config/nvim"
   mkdir -p "$TARGET_DIR/.config/mytermux"
+  mkdir -p "$TARGET_DIR/.config/ptpython"
+
   backup_and_copy "$INSTALL_DIR/config/fish/config.fish" "$FISH_CONFIG_FILE"
   backup_and_copy "$INSTALL_DIR/config/fish/fish_aliases.fish" "$FISH_ALIASES_FILE"
 
@@ -147,6 +150,9 @@ copy_config_files() {
   # Copy mytermux config
   log_message "Starting to copy mytermux config"
   backup_and_copy "$INSTALL_DIR/config/mytermux" "$MYTERMUX_CONFIG"
+
+  log_message "Starting to copy ptpython config"
+  backup_and_copy "$INSTALL_DIR/config/ptpython" "$PTPYTHON_CONFIG"
 
 }
 
