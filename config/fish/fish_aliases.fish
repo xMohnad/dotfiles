@@ -1,4 +1,4 @@
-alias preview "fzf --preview='bat --color=always --style=numbers --theme OneHalfDark {}' --preview-window=down"
+alias preview="fzf --preview='bat --color=always --style=numbers --theme OneHalfDark {}' --preview-window=down"
 
 # Quick Directory Navigation
 alias mj='cd /storage/emulated/0/manga-json'
@@ -45,16 +45,16 @@ alias chfont="~/.scripts/fonts/fonts.sh"
 alias chzsh="~/.scripts/zsh/changetheme.sh"
 
 # System Information
-alias neo "neofetch --ascii_colors 4 6 7"
-alias neodebug "bash ~/.config/neofetch/debug-logo.sh (argparse $argv)"
-alias disk "bash ~/.scripts/system/fetch.sh storage | column -t"
-alias battery "bash ~/.scripts/system/fetch.sh battery"
-alias ls "eza --icons --group-directories-first --time-style=long-iso"
-alias la "eza --icons -lgha --group-directories-first --time-style=long-iso"
-alias lt "eza --icons --tree --time-style=long-iso"
-alias lta "eza --icons --tree -lgha --time-style=long-iso"
-alias bat "bat --theme OneHalfDark --style=header,numbers"
-alias cat "bat --theme OneHalfDark -p (string join ' ' $argv)"
+alias neo="neofetch --ascii_colors 4 6 7"
+alias neodebug="bash ~/.config/neofetch/debug-logo.sh (argparse $argv)"
+alias disk="bash ~/.scripts/system/fetch.sh storage | column -t"
+alias battery="bash ~/.scripts/system/fetch.sh battery"
+alias ls="eza --icons --group-directories-first --time-style=long-iso"
+alias la="eza --icons -lgha --group-directories-first --time-style=long-iso"
+alias lt="eza --icons --tree --time-style=long-iso"
+alias lta="eza --icons --tree -lgha --time-style=long-iso"
+alias bat="bat --theme OneHalfDark --style=header,numbers"
+alias cat="bat --theme OneHalfDark -p (string join ' ' $argv)"
 
 # yt-dlp
 alias yta-aac="yt-dlp --extract-audio --audio-format aac "
@@ -250,15 +250,3 @@ function py
     end
 end
 
-
-function scard
-  while true
-    set card_number $argv[1]
-    curl -s "http://s.net/login?username=$card_number" > /dev/null
-    set re (curl -s "http://192.168.133.2/api/change/$card_number?rate=0")
-    echo $re | jq -r # '.reply'
-    sleep 25
-  end
-end
-
-neofetch 
