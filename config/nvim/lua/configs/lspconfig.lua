@@ -4,8 +4,6 @@ require("nvchad.configs.lspconfig").defaults()
 local lspconfig = require "lspconfig"
 local configs = require "nvchad.configs.lspconfig"
 
-
-
 local function on_attach(client, bufnr)
   configs.on_attach(client, bufnr)
 
@@ -26,6 +24,7 @@ local function on_attach(client, bufnr)
           break
         end
       end
+
       if has_diagnostics then
         vim.diagnostic.open_float(nil, {
           focusable = true,
@@ -40,8 +39,6 @@ local function on_attach(client, bufnr)
 end
 
 local servers = {
-  html = {},
-  bashls = {},
   pyright = {
     settings = {
       python = {
@@ -52,8 +49,17 @@ local servers = {
       },
     },
   },
+  html = {},
+  bashls = {},
+  yamlls = {
+    schemas = {
+      ["https://json.schemastore.org/github-workflow.json"] = ".github/workflows/*",
+    },
+    validate = true,
+    completion = true,
+  },
+  markdown_oxide = {},
 }
-
 
 for name, opts in pairs(servers) do
   opts.on_init = configs.on_init

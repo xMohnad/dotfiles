@@ -13,17 +13,20 @@ local sources = {
 
   -- Python
   b.diagnostics.ruff,
-  b.diagnostics.mypy,
+  -- b.diagnostics.mypy,
   -- b.formatting.black.with({ extra_args = { "--line-length", "79" } }),
 
   -- Markdown
-  b.formatting.markdownlint,
+  -- b.formatting.mdformat,
+  -- b.formatting.markdownlint,
   b.diagnostics.alex,
   b.diagnostics.write_good,
 
+  -- b.formatting.prettier,
 }
 
-null_ls.setup({
+null_ls.setup {
   debug = true,
   sources = sources,
-})
+  timeout = 6000,
+}

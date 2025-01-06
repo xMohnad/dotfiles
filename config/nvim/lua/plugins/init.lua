@@ -1,7 +1,7 @@
 return {
   {
     "stevearc/conform.nvim",
-    event = 'BufWritePre', -- uncomment for format on save
+    event = "BufWritePre", -- uncomment for format on save
     opts = require "configs.conform",
   },
 
@@ -14,9 +14,8 @@ return {
   },
   {
     "jose-elias-alvarez/null-ls.nvim",
-    ft = { "python" },
     opts = function()
-      require("configs.null-ls")
+      require "configs.null-ls"
     end,
   },
   {
@@ -41,25 +40,56 @@ return {
     "nvim-treesitter/nvim-treesitter",
     opts = {
       ensure_installed = {
-        "vim", "lua", "vimdoc", "bash",
-        "html", "css", "python", "fish",
+        "vim",
+        "lua",
+        "vimdoc",
+        "bash",
+        "html",
+        "css",
+        "python",
+        "fish",
+        "markdown",
+        "markdown_inline",
+        "yaml",
       },
-      -- highlight = {
-      --   enable = true,
-      --   additional_vim_regex_highlighting = false,
-      -- },
+      highlight = { enable = true },
+    },
+  },
+  {
+    "iamcco/markdown-preview.nvim",
+    build = "cd app && yarn install",
+    ft = "markdown",
+    config = function()
+      vim.g.mkdp_auto_start = 1
+    end,
+  },
+  {
+    "plasticboy/vim-markdown",
+    commit = "df4be8626e2c5b2a42eb60e1f100fce469b81f7d",
+    require = { "godlygeek/tabular" },
+  },
+  {
+    "williamboman/mason.nvim",
+    opts = {
+      ensure_installed = {},
     },
   },
 
-  -- {
-  --  "williamboman/mason.nvim",
-  --  opts = {
-  --    ensure_installed = {
-  --      "pyright",
-  --      "mypy",
-  --      "ruff",
-  --    },
-  --  },
-  --},
+  {
+    "github/copilot.vim",
+    config = function()
+      vim.g.copilot_no_tab_map = true
+      vim.g.copilot_assume_mapped = true
+      vim.api.nvim_set_keymap("i", "<C-J>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
+    end,
+  },
 
+  -- {
+  --   "ellisonleao/glow.nvim",
+  --   cmd = "Glow",
+  -- },
+  -- {
+  --   "Exafunction/codeium.vim",
+  --   event = "BufEnter",
+  -- },
 }

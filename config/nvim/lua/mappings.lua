@@ -21,10 +21,16 @@ map("i", "<C-A-Up>", "<Esc>:t .-1<CR>gi", { desc = "Copy line up (insert mode)" 
 map({ "n", "v" }, "<C-A-Down>", ":t .+1<CR>", { desc = "Copy line down" })
 map("i", "<C-A-Down>", "<Esc>:t .+1<CR>gi", { desc = "Copy line down (insert mode)" })
 
-
 -- telescope
 map("n", "<leader>fr", "<cmd>Telescope lsp_references<CR>", { desc = "Telescope LSP References" })
 map("n", "gr", "<cmd>Telescope lsp_references<CR>", { desc = "Telescope LSP References", buffer = 0 })
+
+-- Codeium
+-- map('i', '<C-g>', function() return vim.fn['codeium#Accept']() end, { expr = true, desc = "Accept Codeium suggestion" })
+-- map('i', '<C-]>', function() return vim.fn end, { expr = true, desc = "Cycle to next Codeium suggestion" })
+-- map('i', '<C-[>', function() return vim.fn['codeium#CycleCompletions'](-1) end,
+--   { expr = true, desc = "Cycle to previous Codeium suggestion" })
+-- map('i', '<C-x>', function() return vim.fn['codeium#Clear']() end, { expr = true, desc = "Clear Codeium suggestion" })
 
 -- blankline
 map("n", "<leader>cc", function()
@@ -43,4 +49,3 @@ map("n", "<leader>cc", function()
 end, { desc = "Blankline Jump to current context" })
 
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
-
