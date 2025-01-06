@@ -45,6 +45,7 @@ declare -A COPY_LIST=(
   ["$INSTALL_DIR/.termux"]="$TARGET_DIR/.termux"
   ["$INSTALL_DIR/config/fish/config.fish"]="$TARGET_DIR/.config/fish/config.fish"
   ["$INSTALL_DIR/config/fish/fish_aliases.fish"]="$TARGET_DIR/.config/fish/fish_aliases.fish"
+  ["$INSTALL_DIR/config/fish/completions/pkg.fish"]="$TARGET_DIR/.config/fish/completions/pkg.fish"
   ["$INSTALL_DIR/config/nvim"]="$TARGET_DIR/.config/nvim"
   ["$INSTALL_DIR/config/mytermux"]="$TARGET_DIR/.config/mytermux"
   ["$INSTALL_DIR/config/ptpython"]="$TARGET_DIR/.config/ptpython"
