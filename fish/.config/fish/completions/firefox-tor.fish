@@ -1,0 +1,1 @@
+complete --command firefox-tor --no-files --arguments "(env _FIREFOX_TOR_COMPLETE=complete_fish _TYPER_COMPLETE_FISH_ACTION=get-args _TYPER_COMPLETE_ARGS=(commandline -cp) firefox-tor)" --condition "env _FIREFOX_TOR_COMPLETE=complete_fish _TYPER_COMPLETE_FISH_ACTION=is-args _TYPER_COMPLETE_ARGS=(commandline -cp) firefox-tor"
