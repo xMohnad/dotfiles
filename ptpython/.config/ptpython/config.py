@@ -1,4 +1,3 @@
-from prompt_toolkit.output import ColorDepth
 from ptpython.layout import CompletionVisualisation
 from ptpython.repl import PythonRepl
 
@@ -10,8 +9,8 @@ def configure(repl: PythonRepl):
     :param repl: The REPL object being configured.
     """
     # Input settings
-    repl.vi_mode = True
-    repl.paste_mode = True  # Paste mode: on
+    repl.vi_mode = False
+    repl.paste_mode = False  # Paste mode: off
     repl.complete_while_typing = True  # Complete while typing: on
     repl.complete_private_attributes  # Complete private attrs: Always
     repl.enable_fuzzy_completion = True  # Enable fuzzy completion: on
@@ -20,17 +19,20 @@ def configure(repl: PythonRepl):
     repl.enable_mouse_support = False  # Mouse support: off
     repl.confirm_exit = True  # Confirm on exit: on
     repl.enable_input_validation = True  # Input validation: on
-    repl.enable_auto_suggest = False  # Auto suggestion: off
+    repl.enable_auto_suggest = True  # Auto suggestion: on
     repl.accept_input_on_enter = 2  # Accept input on enter: 2
+    repl.enable_mouse_support = True
 
     # Display settings
     repl.completion_visualisation = (
         CompletionVisualisation.MULTI_COLUMN
     )  # Completions: multi-column
-    repl.prompt_style = "classic"  # Prompt: classic
-    repl.insert_blank_line_after_input = False  # Blank line after input: off
-    repl.insert_blank_line_after_output = True  # Blank line after output: on
-    repl.show_signature = False  # Show signature: off
+
+    # repl.prompt_style = "classic"  # Prompt: classic
+    # repl.insert_blank_line_after_input = False  # Blank line after input: off
+    # repl.insert_blank_line_after_output = True  # Blank line after output: on
+
+    repl.show_signature = True  # Show signature: on
     repl.show_docstring = True  # Show docstring: on
     repl.show_line_numbers = True  # Show line numbers: on
     repl.show_meta_enter_message = True  # Show Meta+Enter message: on
@@ -43,8 +45,9 @@ def configure(repl: PythonRepl):
 
     # Color settings
     repl.enable_syntax_highlighting = True  # Syntax highlighting: on
-    repl.swap_light_and_dark = False  # Swap light/dark colors: off
-    repl.use_code_colorscheme("gruvbox-dark")  # Code: gruvbox-dark
-    repl.color_depth = ColorDepth.DEPTH_1_BIT  # Color depth: Monochrome
-    repl.min_brightness = 0.05  # Min brightness: 0.05
-    repl.max_brightness = 1.00  # Max brightness: 1.00
+    repl.swap_light_and_dark = True  # Swap light/dark colors: off
+    repl.use_code_colorscheme("arduino")  # code
+
+    # repl.color_depth = ColorDepth.DEPTH_1_BIT  # Color depth: Monochrome
+    # repl.min_brightness = 0.05  # Min brightness: 0.05
+    # repl.max_brightness = 1.00  # Max brightness: 1.00

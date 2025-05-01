@@ -1,86 +1,114 @@
 -- load defaults i.e lua_lsp
 require("nvchad.configs.lspconfig").defaults()
 
-local lspconfig = require "lspconfig"
+local lspconfig = require("lspconfig")
 
-local nvlsp = require "nvchad.configs.lspconfig"
+local nvlsp = require("nvchad.configs.lspconfig")
 
 local function on_attach(client, bufnr)
-  nvlsp.on_attach(client, bufnr)
+	nvlsp.on_attach(client, bufnr)
 
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "K", "", {
-    noremap = true,
-    silent = true,
-    callback = function()
-      local cursor_pos = vim.api.nvim_win_get_cursor(0)
-      local line = cursor_pos[1] - 1
-      local col = cursor_pos[2]
+	vim.api.nvim_buf_set_keymap(bufnr, "n", "K", "", {
+		noremap = true,
+		silent = true,
+		callback = function()
+			local cursor_pos = vim.api.nvim_win_get_cursor(0)
+			local line = cursor_pos[1] - 1
+			local col = cursor_pos[2]
 
-      local diagnostics = vim.diagnostic.get(bufnr, { lnum = line })
-      local has_diagnostics = false
+			local diagnostics = vim.diagnostic.get(bufnr, { lnum = line })
+			local has_diagnostics = false
 
-      for _, diagnostic in ipairs(diagnostics) do
-        if diagnostic.col <= col and col <= diagnostic.end_col then
-          has_diagnostics = true
-          break
-        end
-      end
+			for _, diagnostic in ipairs(diagnostics) do
+				if diagnostic.col <= col and col <= diagnostic.end_col then
+					has_diagnostics = true
+					break
+				end
+			end
 
-      if has_diagnostics then
-        vim.diagnostic.open_float(nil, {
-          focusable = true,
-          severity_sort = true,
-          source = "if_many",
-        })
-      else
-        vim.lsp.buf.hover()
-      end
-    end,
-  })
+			if has_diagnostics then
+				vim.diagnostic.open_float(nil, {
+					focusable = true,
+					severity_sort = true,
+					source = "if_many",
+				})
+			else
+				vim.lsp.buf.hover()
+			end
+		end,
+	})
 end
 
 local servers = {
-  cssls = {
-    filetypes = { "css", "scss", "less", "tcss" },
-  },
-  pyright = {
-    settings = {
-      python = {
-        analysis = {
-          autoSearchPaths = true,
-          typeCheckingMode = "basic",
-        },
-      },
-    },
-  },
-  html = {},
-  bashls = {},
-  yamlls = {
-    schemas = {
-      ["https://json.schemastore.org/github-workflow.json"] = ".github/workflows/*",
-    },
-    validate = true,
-    completion = true,
-  },
-  markdown_oxide = {},
-  -- lua_ls = {},
-  jsonls = {
-    settings = {
-      json = {
-        schemas = require("schemastore").json.schemas(),
-        validate = { enable = true },
-      },
-    },
-  },
-}
+	cssls = {
+		filetypes = { "css", "scss", "less", "tcss" },
+	},
+	pyright = {
+		settings = {
+			python = {
+				analysis = {
+					autoSearchPaths = true,
+					typeCheckingMode = "basic",
+				},
+			},
+		},
+	},
+	html = {},
+	bashls = {},
+	yamlls = {
+		schemas = {
+			["https://json.schemastore.org/github-workflow.json"] = ".github/workflows/*",
+		},
+		validate = true,
+		completion = true,
+	},
+	markdown_oxide = {},
+	-- lua_ls = {},
+	jsonls = {
+		settings = {
+			json = {
+				schemas = require("schemastore").json.schemas(),
+				validate = { enable = true },
+			},
+		},
+	},
+	gopls = {
+		cmd = { "gopls" },
+		settings = {
+			gopls = {
+				analyses = {
+					unusedparams = true,
+				},
+				staticcheck = true,
+			},
+		},
+	},
+	ts_ls = {
+		on_attach = function(client, _)
+			client.server_capabilities.documentFormattingProvider = false
+		end,
+	},
+	eslint = {
+		on_attach = function(client, _)
+			client.server_capabilities.documentFormattingProvider = true
+		end,
+		settings = {
+			format = { enable = true },
+		},
+	},
 
+	jinja_lsp = {
+		capabilities = require("cmp_nvim_lsp").default_capabilities(),
+		filetypes = { "html", "jinja", "jinja2", "htmldjango" },
+	},
+}
 -- lsps with default config
 for name, lsp in pairs(servers) do
-  lsp.on_init = nvlsp.on_init
-  lsp.on_attach = on_attach
-  lsp.capabilities = nvlsp.capabilities
+	lsp.on_init = nvlsp.on_init
+	lsp.on_attach = on_attach
+	lsp.capabilities = nvlsp.capabilities
 
-  lspconfig[name].setup(lsp)
+	lspconfig[name].setup(lsp)
 end
 
 -- local servers = {"html", "pyright", "cssls"}

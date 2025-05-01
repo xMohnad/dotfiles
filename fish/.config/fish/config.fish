@@ -64,3 +64,4 @@ end
 # Enable Vi mode in Fish shell (uncomment if you prefer Vi keybindings)
 # fish_vi_key_bindings
 
+set -x GOPATH $HOME/.go

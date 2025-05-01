@@ -17,18 +17,6 @@ alias mj='cd /storage/emulated/0/manga-json'
 alias pf="cd \$PREFIX"
 alias b="cd -"
 
-# projects Directories
-alias proj="cd ~/projects/"
-alias cdweb='cd ~/Projects/Web'
-alias cdcli='cd ~/Projects/CLI'
-alias cdpythoncli='cd ~/Projects/CLI/Python'
-alias cdbashcli='cd ~/Projects/CLI/Bash'
-alias cddesktop='cd ~/Projects/Desktop'
-alias cdlibraries='cd ~/Projects/Libraries'
-alias cdmobile='cd ~/Projects/Mobile'
-alias cdexperiments='cd ~/Projects/Experiments'
-alias cdarchives='cd ~/Projects/Archives'
-
 # silicon
 alias silicon-font="silicon --font 'DejaVu Sans Mono'"
 
