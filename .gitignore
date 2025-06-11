@@ -3,3 +3,4 @@ node_modules/
 __pycache__/
 .env/
 fish/.config/fish/fish_variables
+nvim/.config/nvim/lazy-lock.json
