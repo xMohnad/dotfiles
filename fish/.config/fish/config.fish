@@ -41,7 +41,7 @@ end
 
 # Display system information using Neofetch if it is installed
 if type neofetch > /dev/null
-    neofetch
+    # neofetch
 end
 
 # Update PATH for Google Cloud SDK if it exists
@@ -65,3 +65,11 @@ end
 # fish_vi_key_bindings
 
 set -x GOPATH $HOME/.go
+
+function py
+    if test (count $argv) -eq 0
+        ptpython
+    else
+        python $argv
+    end
+end

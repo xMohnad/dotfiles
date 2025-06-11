@@ -1,18 +1,11 @@
 alias nv="nvim"
-alias preview="fzf --preview='bat --color=always --style=numbers --theme OneHalfDark {}' --preview-window=down"
 alias q="exit"
 alias c="clear; neofetch"  # Clear terminal and fetch system details
 alias pg="ping google.com"  # Ping Google
-alias largefile="du -h -x -s -- * | sort -r -h | head -20"  # Show largest Files
 
 # Quick Directory Navigation
 alias sd="cd /sdcard"
 alias archives="cd /data/data/com.termux/cache/apt/archives/"
-alias ms="cd /sdcard/Movies"
-alias dl="cd /sdcard/Download"
-alias ds="cd /sdcard/Documents"
-
-alias fontf="cd ~/.local/share/fonts"
 alias mj='cd /storage/emulated/0/manga-json'
 alias pf="cd \$PREFIX"
 alias b="cd -"
@@ -31,9 +24,6 @@ alias fconf="nvim ~/.config/fish/config.fish"
 alias fal="nvim ~/.config/fish/alias.fish"
 alias neoconf="nvim ~/.config/neofetch/config.conf"
 alias termconf="nvim ~/.termux/termux.properties"
-alias myipconf="nvim ~/.scripts/ip.sh"
-alias loginconf="nvim ~/.scripts/login.sh"
-alias prot="cd \$PREFIX/var/lib/proot-distro"
 
 # System Information
 alias disk="bash ~/.scripts/system/fetch.sh storage | column -t"
@@ -94,19 +84,8 @@ alias open="termux-open"
 # termbin
 alias tb="nc termbin.com 9999"
 
-#i the terminal rickroll
+# the terminal rickroll
 alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
-
-# PRoot Distro Management
-alias protlogin="proot-distro login \$argv[1]"
 
 # ImageMagick Font List
 alias listfont="magick convert -list font | grep -iE 'font:.*'"
-
-function py
-    if test (count $argv) -eq 0
-        ptpython
-    else
-        python $argv
-    end
-end
