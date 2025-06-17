@@ -89,6 +89,7 @@ local servers = {
 		},
 	},
 	ts_ls = {},
+  kotlin_language_server = {}
 }
 
 -- lsps with default config

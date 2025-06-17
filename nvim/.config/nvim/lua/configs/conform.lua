@@ -20,6 +20,7 @@ local options = {
     tcss = { "prettier" },
     go = { "gofumpt" },
     dart = { "dart_format" },
+    kotlin = { "ktlint" }
   },
 
   format_on_save = {
