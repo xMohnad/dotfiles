@@ -89,7 +89,18 @@ local servers = {
 		},
 	},
 	ts_ls = {},
-  kotlin_language_server = {}
+	taplo = {
+		settings = {
+			evenBetterToml = {
+				schema = {
+					associations = {
+						["pyproject.toml"] = "https://json.schemastore.org/pyproject.json",
+					},
+				},
+			},
+		},
+	},
+	marksman = {},
 }
 
 -- lsps with default config
