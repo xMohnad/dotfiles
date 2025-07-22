@@ -1,5 +1,5 @@
 # Add $HOME/.cargo/bin to the PATH environment variable for Rust tools
-set PATH $PATH $HOME/.cargo/bin
+set PATH $PATH $HOME/.cargo/bin $HOME/Applications $HOME/.local/bin
 
 # Set default options for FZF (Fuzzy Finder)
 # - Height: 40% of the terminal window
