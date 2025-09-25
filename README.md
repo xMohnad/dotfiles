@@ -15,7 +15,7 @@ This repository contains my configuration files and dotfiles.
    Use the `stow` command to symlink the configuration files to their appropriate locations.
 
    ```bash
-   stow fish 
+   stow fish
    # Repeat for other directories as needed
    ```
 
@@ -30,6 +30,8 @@ Managed with **Fisher**
 | Bass      | edc/bass                    |
 | Bang-Bang | oh-my-fish/plugin-bang-bang |
 | Autopair  | jorgebucaran/autopair.fish  |
+| Sponge    | meaningful-ooo/sponge       |
+| Z         | jethrokuan/z                |
 
 ## Contributing
 
