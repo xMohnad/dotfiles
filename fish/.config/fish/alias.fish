@@ -47,16 +47,3 @@ alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/mas
 
 # silicon
 alias silicon-font="silicon --font 'DejaVu Sans Mono'"
-
-# alias for Termux 
-if string match -q "/data/data/com.termux*" $PREFIX
-    # Termux:API
-    alias scan="termux-media-scan"
-    alias open="termux-open"
-
-    # Quick Directory Navigation
-    alias sd="cd /sdcard"
-    alias mj='cd /sdcard/manga-json'
-
-    alias reload="termux-reload-settings"
-end
