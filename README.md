@@ -30,7 +30,6 @@ Managed with **Fisher**
 | Bass      | edc/bass                    |
 | Bang-Bang | oh-my-fish/plugin-bang-bang |
 | Autopair  | jorgebucaran/autopair.fish  |
-| Sponge    | meaningful-ooo/sponge       |
 | Z         | jethrokuan/z                |
 
 ## Contributing
