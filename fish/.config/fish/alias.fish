@@ -1,5 +1,6 @@
 alias nv="nvim"
-alias py="bpython"
+alias py="python"
+alias pt="ptpython"
 alias q="exit"
 alias c="clear"
 alias cn="clear; neofetch"
