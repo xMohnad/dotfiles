@@ -1,5 +1,5 @@
 # Environment Paths
-set PATH $PATH $HOME/.cargo/bin $HOME/Applications $HOME/.local/bin
+fish_add_path $HOME/.cargo/bin $HOME/Applications $HOME/.local/bin
 set -x GOPATH $HOME/.go
 
 # Set the timezone to UTC
