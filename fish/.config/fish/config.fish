@@ -1,32 +1,44 @@
+# Nothing to do if not inside an interactive shell.
+if not status is-interactive
+    return 0
+end
+
 # Environment Paths
-fish_add_path $HOME/.cargo/bin $HOME/Applications $HOME/.local/bin
-set -x GOPATH $HOME/.go
+set -gx ANDROID_HOME $HOME/.android-sdk
+set -gx GOPATH $HOME/.go
+fish_add_path \
+    $HOME/.cargo/bin \
+    $HOME/Applications \
+    $HOME/.local/bin \
+    $ANDROID_HOME/cmdline-tools/latest/bin
 
-# Set the timezone to UTC
-export TZ='UTC'
+# Remove the gretting message.
+set -U fish_gremting
 
-# Terminal & Editor Settings
-set fish_greeting
-set TERM xterm-256color
+# Editor Settings
 set -x EDITOR nvim
 set -x VISUAL nvim
 set -x PAGER less
-# set -gx USER "xMohnad"
 
-# Enable Vi mode in Fish shell
-fish_vi_key_bindings
+# Vi mode.
+set -g fish_key_bindings fish_vi_key_bindings
+set fish_vi_force_cursor 1
+set fish_cursor_default block
+set fish_cursor_insert line
+set fish_cursor_replace_one underscore
+
+# Shell integrations.
+fzf --fish | source
+
+# Color theme.
+fish_config theme choose "TokyoNight Night"
 
 # Source custom alias file if it exists
 if test -f ~/.config/fish/alias.fish
     source ~/.config/fish/alias.fish
 end
 
-# Display system information using Neofetch if it is installed
-if type neofetch >/dev/null
-    # neofetch
-end
-
-# Update PATH for Google Cloud SDK if it exists
-if [ -f '/data/data/com.termux/files/home/.local/share/google-cloud-sdk/path.fish.inc' ]
-    . '/data/data/com.termux/files/home/.local/share/google-cloud-sdk/path.fish.inc'
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/data/data/com.termux/files/home/Applications/google-cloud-sdk/path.fish.inc' ]
+    . '/data/data/com.termux/files/home/Applications/google-cloud-sdk/path.fish.inc'
 end
