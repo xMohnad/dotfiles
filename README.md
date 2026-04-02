@@ -19,19 +19,6 @@ This repository contains my configuration files and dotfiles.
    # Repeat for other directories as needed
    ```
 
-## Fish Plugins
-
-Managed with **Fisher**
-
-| Plugin    | Source                      |
-| --------- | --------------------------- |
-| Tide      | IlanCosman/tide@v6          |
-| FZF       | jethrokuan/fzf              |
-| Bass      | edc/bass                    |
-| Bang-Bang | oh-my-fish/plugin-bang-bang |
-| Autopair  | jorgebucaran/autopair.fish  |
-| Z         | jethrokuan/z                |
-
 ## Contributing
 
 Feel free to fork this repository, make changes, and submit pull requests.
