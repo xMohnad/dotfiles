@@ -6,14 +6,15 @@ end
 # Environment Paths
 set -gx ANDROID_HOME $HOME/.android-sdk
 set -gx GOPATH $HOME/.go
-fish_add_path \
-    $HOME/.cargo/bin \
-    $HOME/Applications \
+set -gx PATH \
     $HOME/.local/bin \
-    $ANDROID_HOME/cmdline-tools/latest/bin
+    $HOME/Applications \
+    $HOME/.cargo/bin \
+    $ANDROID_HOME/cmdline-tools/latest/bin \
+    $PATH
 
 # Remove the gretting message.
-set -U fish_gremting
+set -U fish_greeting
 
 # Editor Settings
 set -x EDITOR nvim
