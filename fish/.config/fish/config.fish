@@ -5,10 +5,8 @@ end
 
 # Environment Paths
 set -gx ANDROID_HOME $HOME/.android-sdk
-set -gx GOPATH $HOME/.go
 set -gx PATH \
     $HOME/.local/bin \
-    $HOME/Applications \
     $HOME/.cargo/bin \
     $ANDROID_HOME/cmdline-tools/latest/bin \
     $PATH
