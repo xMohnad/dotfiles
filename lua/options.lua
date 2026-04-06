@@ -1,69 +1,85 @@
-local opt = vim.opt
-local o = vim.o
-local g = vim.g
+-- Set <space> as the leader key.
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
--------------------------------------- options ------------------------------------------
----LSP
-vim.diagnostic.config({
-	virtual_lines = { current_line = true },
-	virtual_text = false,
+-- Use an indentation of 2 apaces.
+vim.o.sw = 2
+vim.o.ts = 2
+vim.o.et = true
+
+-- Show whitespace.
+vim.o.showmode = false
+-- vim.opt.listchars = { space = '⋅', trail = '⋅', tab = '  ↦' }
+
+-- Use a virtual style for document color
+vim.lsp.document_color.enable(true, nil, { style = "virtual" })
+
+-- UI characters.
+vim.opt.fillchars = { eob = " " }
+
+-- Show line numbers.
+vim.wo.number = true
+vim.opt.relativenumber = true
+vim.o.numberwidth = 2
+
+-- Wraping.
+vim.o.wrap = false
+
+-- Enable mouse mode.
+vim.o.mouse = "a"
+
+-- Disable horizontal scrolling.
+vim.o.mousescroll = "ver:3,hor:0"
+
+-- Use rounded borders for floating windows.
+vim.o.winborder = "rounded"
+
+-- Save undo history.
+vim.o.undofile = true
+
+-- Enable project-local configuration.
+vim.o.exrc = true
+
+-- Case insensitive searching UNLESS /C or the search has capitals.
+vim.o.ignorecase = true
+vim.o.smartcase = true
+
+-- Keep signcolumn on by default.
+vim.wo.signcolumn = "yes"
+
+-- Update times and timeouts.
+vim.o.updatetime = 300
+vim.o.timeoutlen = 500
+vim.o.ttimeoutlen = 10
+
+-- Completion.
+vim.o.completeopt = "menuone,noselect,noinsert"
+vim.o.pumheight = 15
+vim.o.pumborder = "rounded"
+
+-- Diff mode settings.
+-- Setting the context to a very large number disables folding.
+vim.opt.diffopt:append("vertical,context:99")
+
+vim.opt.shortmess:append({
+  w = true,
+  s = true,
 })
-o.winborder = "rounded"
 
-o.laststatus = 3
-o.showmode = false
-o.splitkeep = "screen"
-o.termguicolors = true
+vim.diagnostic.config({
+  virtual_lines = { current_line = true },
+  virtual_text = false,
+})
 
--- Use system clipboard for all yank/delete/change/put
--- o.clipboard = "unnamedplus"
+-- Status line.
+vim.o.laststatus = 3
+vim.o.cmdheight = 1
 
-o.cursorline = true
-o.cursorlineopt = "number"
+-- Disable cursor blinking in terminal mode.
+vim.o.guicursor = "n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,t:block-TermCursor"
 
--- Indenting
-o.expandtab = true
-o.smartindent = true
-o.shiftwidth = 2
-o.tabstop = 2
-o.softtabstop = 2
-o.wrap = false
-
-opt.fillchars = { eob = " " }
-o.ignorecase = true
-o.smartcase = true
-o.mouse = "a"
-
--- Numbers
-o.number = true
-opt.relativenumber = true -- show relative numbers
-o.numberwidth = 2
-o.ruler = false
-
--- disable nvim intro
-opt.shortmess:append("sI")
-
-o.signcolumn = "yes"
-o.splitbelow = true
-o.splitright = true
-o.timeoutlen = 400
-o.undofile = true
-
--- interval for writing swap file to disk, also used by gitsigns
-o.updatetime = 300
-
--- go to previous/next line with h,l,left arrow and right arrow
--- when cursor reaches end/beginning of line
-opt.whichwrap:append("<>[]hl")
-
--- disable some default providers
-g.loaded_node_provider = 0
-g.loaded_python3_provider = 0
-g.loaded_perl_provider = 0
-g.loaded_ruby_provider = 0
-
--- add binaries installed by mason.nvim to path
-local is_windows = vim.fn.has("win32") ~= 0
-local sep = is_windows and "\\" or "/"
-local delim = is_windows and ";" or ":"
-vim.env.PATH = table.concat({ vim.fn.stdpath("data"), "mason", "bin" }, sep) .. delim .. vim.env.PATH
+-- Disable health checks for these providers.
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_node_provider = 0

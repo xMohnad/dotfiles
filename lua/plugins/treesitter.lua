@@ -1,35 +1,70 @@
-return {
-	{
-		"nvim-treesitter/nvim-treesitter",
-		event = { "BufReadPost", "BufNewFile" },
-		cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
-		build = ":TSUpdate",
-		opts = {
-			ensure_installed = { "lua", "python", "markdown", "markdown_inline", "luadoc", "printf", "vim", "vimdoc" },
-			sync_install = true,
-			-- Automatically install missing parsers when entering buffer
-			-- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-			auto_install = true,
-			highlight = {
-				enable = true,
-				additional_vim_regex_highlighting = false,
-				use_languagetree = true,
-			},
+-- Highlight, edit, and navigate code.
 
-			markdown = {
-				enable = true,
-				-- configuration here or nothing for defaults
-			},
-			indent = { enable = true },
-			fold = { enable = true },
-		},
-		config = function(_, opts)
-			require("nvim-treesitter.configs").setup(opts)
-		end,
-	},
-	{
-		"cachebag/nvim-tcss",
-		ft = "tcss",
-		config = true,
-	},
+return {
+  {
+    "nvim-treesitter/nvim-treesitter",
+    lazy = false,
+    dependencies = {
+      {
+        "nvim-treesitter/nvim-treesitter-context",
+        opts = {
+          -- Avoid the sticky context from growing a lot.
+          max_lines = 3,
+          -- Match the context lines to the source code.
+          multiline_threshold = 1,
+          -- Disable it when the window is too small.
+          min_window_height = 20,
+        },
+        keys = {
+          {
+            "[c",
+            function()
+              -- Jump to previous change when in diffview.
+              if vim.wo.diff then
+                return "[c"
+              else
+                vim.schedule(function()
+                  require("treesitter-context").go_to_context()
+                end)
+                return "<Ignore>"
+              end
+            end,
+            desc = "Jump to upper context",
+            expr = true,
+          },
+        },
+      },
+    },
+    build = ":TSUpdate",
+    config = function(_, opts)
+      require("nvim-treesitter").setup(opts)
+
+      -- Make sure that the following are installed:
+      require("nvim-treesitter").install({
+        "gitcommit",
+        "gitignore",
+        "gitattributes",
+        "bash",
+        "cpp",
+        "fish",
+        "hyprlang",
+        "json",
+        "json5",
+        "lua",
+        "markdown",
+        "markdown_inline",
+        "python",
+        "regex",
+        "toml",
+        "css",
+        "html",
+        "tsx",
+        "typescript",
+        "vim",
+        "vimdoc",
+        "yaml",
+        "kotlin",
+      })
+    end,
+  },
 }

@@ -11,5 +11,5 @@ return {
       suggestion_color = "#475284",
       cterm = 1,
     },
-  }
+  },
 }
