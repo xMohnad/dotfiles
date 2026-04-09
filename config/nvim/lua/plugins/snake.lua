@@ -18,7 +18,18 @@ return {
     explorer = { enabled = true },
     bigfile = { enabled = true },
     notifier = { enabled = true },
-    picker = { enabled = true },
+    picker = {
+      enabled = true,
+      sources = {
+        grep = { hidden = true },
+        explorer = { hidden = true },
+        files = {
+          hidden = true,
+          follow = true,
+        },
+      },
+    },
+
     input = { enabled = true },
     quickfile = { enabled = true },
     scope = { enabled = true },
