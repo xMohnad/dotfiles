@@ -1,0 +1,37 @@
+[core]
+    editor = nvim
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    file-modified-label = "modified:"
+    hunk-header-style = omit
+    navigate = true
+    syntax-theme = Catppuccin Mocha
+
+[alias]
+	sync-main = !git switch main && git fetch upstream && git reset --keep FETCH_HEAD
+
+[commit]
+  template = ~/.config/git/.gitmessage
+
+[init]
+    defaultBranch = main
+
+[merge]
+    conflictstyle = zdiff3
+
+[pull]
+    rebase = true
+
+[push]
+    autoSetupRemote = true
+
+[fetch]
+    prune = true
+
+[user]
+	email = mohnad00967@gmail.com
+	name = xMohnad
