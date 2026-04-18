@@ -7,6 +7,7 @@ vim.api.nvim_create_autocmd("FileType", {
     "man",
     "qf",
     "scratch",
+    "vim",
   },
   callback = function(args)
     if args.match ~= "help" or not vim.bo[args.buf].modifiable then
