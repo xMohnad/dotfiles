@@ -9,7 +9,6 @@ return {
     "--clang-tidy",
     "--header-insertion=iwyu",
     "--completion-style=detailed",
-    "--fallback-style=none",
     "--function-arg-placeholders=false",
   },
   filetypes = { "c", "cpp" },
