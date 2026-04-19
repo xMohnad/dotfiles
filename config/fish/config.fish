@@ -3,21 +3,8 @@ if not status is-interactive
     return 0
 end
 
-# Environment Paths
-set -gx ANDROID_HOME $HOME/.android-sdk
-set -gx PATH \
-    $HOME/.local/bin \
-    $HOME/.cargo/bin \
-    $ANDROID_HOME/cmdline-tools/latest/bin \
-    $PATH
-
 # Remove the gretting message.
 set -U fish_greeting
-
-# Editor Settings
-set -x EDITOR nvim
-set -x VISUAL nvim
-set -x PAGER less
 
 # Vi mode.
 set -g fish_key_bindings fish_vi_key_bindings
