@@ -11,11 +11,14 @@ export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/gcr/ssh"
 # Android SDK
 export ANDROID_HOME="$HOME/.android-sdk"
 
+# GoLang
+export GOPATH=$HOME/.go
+
 # Make sure this stuff is in the path.
 export PATH="$HOME/.nvim/bin:$PATH"  # Neovim
 export PATH="$HOME/.cargo/bin:$PATH" # Cargo
 export PATH="$HOME/.local/bin:$PATH" # Local scripts
-export PATH="$HOME/go/bin:$PATH"     # Go binaries.
+export PATH="$GOPATH/bin:$PATH"      # Go binaries.
 export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$PATH" # Android Tools binaries.
 
 # Use neovim as the default editor.
