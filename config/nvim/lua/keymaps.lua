@@ -17,9 +17,6 @@ vim.keymap.set("n", "U", "<C-r>", { desc = "Redo" })
 -- Open the package manager.
 vim.keymap.set("n", "<leader>L", "<cmd>Lazy<cr>", { desc = "Lazy" })
 
--- Restart Neovim.
-vim.keymap.set("n", "<leader>R", "<cmd>restart<cr>", { desc = "Restart Neovim" })
-
 -- Switch between windows.
 vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move to the left window", remap = true })
 vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Move to the bottom window", remap = true })
