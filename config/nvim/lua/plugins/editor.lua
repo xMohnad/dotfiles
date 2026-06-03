@@ -150,10 +150,6 @@ return {
           end,
         },
       },
-      modes = {
-        -- Enable flash when searching with ? or /
-        search = { enabled = true },
-      },
     },
     -- stylua: ignore
     keys = {
