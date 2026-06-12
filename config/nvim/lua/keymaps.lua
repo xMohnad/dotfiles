@@ -44,10 +44,10 @@ vim.keymap.set("c", "dm", "delmarks", { desc = "Delete marks" })
 vim.keymap.set("n", ";", ":", { desc = "Enter command mode" })
 
 -- Yank to the system clipboard.
-vim.keymap.set({ "i", "n", "v" }, "<C-y>", '"*y', { desc = "Yank to system clipboard" })
+vim.keymap.set({ "i", "n", "v" }, "<C-y>", '"+y', { desc = "Yank to system clipboard" })
 
 -- Paste from the system clipboard.
-vim.keymap.set({ "i", "n", "v" }, "<leader>p", '<Esc>"*p', { desc = "Paste from system clipboard" })
+vim.keymap.set({ "i", "n", "v" }, "<leader>p", '<Esc>"+p', { desc = "Paste from system clipboard" })
 
 -- Move line up
 vim.keymap.set("n", "<A-Up>", ":m .-2<CR>==", { desc = "Move line up" })
