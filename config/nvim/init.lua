@@ -57,4 +57,4 @@ require("lazy").setup(plugins, {
 vim.cmd.packadd("nvim.undotree")
 
 -- Enable the new experimental command-line features.
--- require("vim._core.ui2").enable({})
+require("vim._core.ui2").enable({})
