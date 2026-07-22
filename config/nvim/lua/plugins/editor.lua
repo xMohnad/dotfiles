@@ -135,30 +135,6 @@ return {
     },
   },
 
-  {
-    "folke/flash.nvim",
-    event = "VeryLazy",
-    opts = {
-      jump = { nohlsearch = true },
-      search = {
-        exclude = {
-          "flash_prompt",
-          "qf",
-          function(win)
-            -- Non-focusable windows.
-            return not vim.api.nvim_win_get_config(win).focusable
-          end,
-        },
-      },
-    },
-    -- stylua: ignore
-    keys = {
-      { "s", mode = { "n", "x" }, function() require("flash").jump() end, desc = "Flash" },
-      { "r", mode = "o", function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
-      { "R", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
-    },
-  },
-
   -- Markdown stuff
   {
     "tadmccorkle/markdown.nvim",
