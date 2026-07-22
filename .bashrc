@@ -9,7 +9,7 @@ export XDG_STATE_HOME="$HOME/.local/state"
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/gcr/ssh"
 
 # Android SDK
-export ANDROID_HOME="$HOME/.android-sdk"
+export ANDROID_HOME="$HOME/.android/SDK"
 
 # GoLang
 export GOPATH=$HOME/.go
